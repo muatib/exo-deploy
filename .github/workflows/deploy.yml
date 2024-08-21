@@ -33,25 +33,25 @@ jobs:
         curl http://localhost:8080 | grep "Hello"
         docker stop test-container
 
-    - name: Install docker if not installed
-      env:
-        PRIVATE_KEY: ${{ secrets.ORACLE_PRIVATE_KEY }}
-        HOST: ${{ secrets.ORACLE_HOST }}
-        USER: ${{ secrets.ORACLE_USER }}
-      run: |
-        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-        ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
-          # Installer docker si on l'a pas 
-          if ! command -v docker &> /dev/null; then
-            sudo apt-get update
-            sudo apt-get install -y docker.io
-            sudo usermod -aG docker $USER
+    # - name: Install docker if not installed
+    #   env:
+    #     PRIVATE_KEY: ${{ secrets.ORACLE_PRIVATE_KEY }}
+    #     HOST: ${{ secrets.ORACLE_HOST }}
+    #     USER: ${{ secrets.ORACLE_USER }}
+    #   run: |
+    #     echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+    #     ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
+    #       # Installer docker si on l'a pas 
+    #       if ! command -v docker &> /dev/null; then
+    #         sudo apt-get update
+    #         sudo apt-get install -y docker.io
+    #         sudo usermod -aG docker $USER
 
-            sudo systemctl start docker
-            sudo systemctl enable docker
-            sudo docker -v
-          fi
-        EOF
+    #         sudo systemctl start docker
+    #         sudo systemctl enable docker
+    #         sudo docker -v
+    #       fi
+    #     EOF
     
     - name: Deploy to Oracle Cloud
       env:
